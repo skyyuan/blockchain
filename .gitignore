@@ -1,0 +1,6 @@
+.gvm_local/*
+.idea/*
+pkg/
+bin/
+src/github.com
+src/blockchain/blockchain
