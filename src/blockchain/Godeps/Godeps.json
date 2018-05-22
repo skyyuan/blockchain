@@ -47,6 +47,15 @@
 			"ImportPath": "github.com/astaxie/beego/utils",
 			"Comment": "v1.9.2-2-gf166888",
 			"Rev": "f16688817aa428d10361394015b40d096b680542"
+		},
+		{
+			"ImportPath": "github.com/boltdb/bolt",
+			"Comment": "v1.3.1-5-gfd01fc7",
+			"Rev": "fd01fc79c553a8e99d512a07e8e0c63d4a3ccfc5"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "7c87d13f8e835d2fb3a70a2912c811ed0c1d241b"
 		}
 	]
 }

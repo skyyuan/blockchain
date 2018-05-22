@@ -3,4 +3,6 @@
 pkg/
 bin/
 src/github.com
+src/golang.org/
 src/blockchain/blockchain
+src/blockchain/blockchain.db

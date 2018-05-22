@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"bytes"
 	"time"
+	"encoding/gob"
 )
 
 type Block struct {
@@ -22,6 +23,8 @@ func (b *Block) SetHash() {
 	b.Hash = hash[:]
 }
 
+
+//创建区块
 func NewBlock(data string, prevBlockHash []byte) *Block {
 	block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}, 0}
 	//block.SetHash()
@@ -38,4 +41,24 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 
 func NewGenesisBlock() *Block {
 	return NewBlock("Genesis Block", []byte{})
+}
+
+//序列化数据结构
+func (b *Block) Serialize() []byte {
+	var result bytes.Buffer
+	encoder := gob.NewEncoder(&result)
+
+	encoder.Encode(b)
+
+	return result.Bytes()
+}
+
+//反序列化
+func DeserializeBlock(d []byte) *Block {
+	var block Block
+
+	decoder := gob.NewDecoder(bytes.NewReader(d))
+	decoder.Decode(&block)
+
+	return &block
 }

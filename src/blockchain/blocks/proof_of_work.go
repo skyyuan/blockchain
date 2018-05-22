@@ -8,6 +8,8 @@ import (
 	"math"
 )
 
+
+//运算难度12
 const targetBits = 12
 
 var (
@@ -43,6 +45,7 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 	return data
 }
 
+//加密
 func (pow *ProofOfWork) Run() (int, []byte) {
 	var hashInt big.Int
 	var hash [32]byte
