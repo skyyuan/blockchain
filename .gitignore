@@ -6,3 +6,4 @@ src/github.com
 src/golang.org/
 src/blockchain/blockchain
 src/blockchain/blockchain.db
+src/blockchain/conf/app.conf
