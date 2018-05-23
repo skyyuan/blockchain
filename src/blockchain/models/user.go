@@ -32,7 +32,7 @@ func Newuser(db *mgo.Database, name, account, pwd string)(user User, err error){
 
 		fmt.Println(string(out))
 
-		bc.AddBlock(string(out), user.Id_.Hex())
+		bc.AddBlock(string(out))
 	}
 	return
 }

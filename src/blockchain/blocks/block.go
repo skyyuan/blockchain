@@ -16,7 +16,6 @@ type Block struct {
 	PrevBlockHash []byte
 	Hash          []byte
 	Nonce         int
-	Id            []byte
 }
 
 func (b *Block) SetHash() {
@@ -27,8 +26,8 @@ func (b *Block) SetHash() {
 }
 
 //创建区块
-func NewBlock(data, id string, prevBlockHash []byte) *Block {
-	block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}, 0, []byte(id)}
+func NewBlock(data string, prevBlockHash []byte) *Block {
+	block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}, 0}
 	//block.SetHash()
 
 	pow := NewProofOfWork(block)
@@ -41,7 +40,7 @@ func NewBlock(data, id string, prevBlockHash []byte) *Block {
 }
 
 func NewGenesisBlock() *Block {
-	return NewBlock("Genesis Block", "1", []byte{})
+	return NewBlock("Genesis Block",[]byte{})
 }
 
 func Verify(id string) (flag string) {

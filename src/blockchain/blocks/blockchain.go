@@ -26,14 +26,14 @@ func init() {
 //}
 
 //添加区块链 数据库形式
-func (bc *Blockchain) AddBlock(data, id string) {
+func (bc *Blockchain) AddBlock(data string) {
 	var lastHash []byte
 	err := bc.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
 		lastHash = b.Get([]byte("l"))
 		return nil
 	})
-	newBlock := NewBlock(data, id, lastHash)
+	newBlock := NewBlock(data, lastHash)
 	err = bc.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
 		//存储序列化的代表数据到数据库里
