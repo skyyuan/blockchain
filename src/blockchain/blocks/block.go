@@ -49,13 +49,12 @@ func Verify(id string) (flag string) {
 	bci := bc.Iterator()
 	for {
 		block := bci.Next()
-		blockdata,err := bc.GetBlock(block.Hash)
-		if err != nil {
-			return err.Error()
-		}
-		//json str 转struct
+		//blockdata,err := bc.GetBlock(block.Hash)
+		//if err != nil {
+		//	return err.Error()
+		//}
 		var dat map[string]interface{}
-		e := json.Unmarshal(blockdata.Data, &dat)
+		e := json.Unmarshal(block.Data, &dat)
 		if  e == nil {
 			fmt.Println(dat)
 			fmt.Println(dat["Id_"])
