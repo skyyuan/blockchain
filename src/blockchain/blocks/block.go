@@ -6,6 +6,8 @@ import (
 	"encoding/gob"
 	"strconv"
 	"time"
+	"encoding/json"
+	"fmt"
 )
 
 type Block struct {
@@ -40,6 +42,35 @@ func NewBlock(data, id string, prevBlockHash []byte) *Block {
 
 func NewGenesisBlock() *Block {
 	return NewBlock("Genesis Block", "1", []byte{})
+}
+
+func Verify(id string) (flag string) {
+	bc := GetBlockchain()
+	defer bc.DBClose()
+	bci := bc.Iterator()
+	for {
+		block := bci.Next()
+		blockdata,err := bc.GetBlock(block.Hash)
+		if err != nil {
+			return err.Error()
+		}
+		//json str 转struct
+		var dat map[string]interface{}
+		e := json.Unmarshal(blockdata.Data, &dat)
+		if  e == nil {
+			fmt.Println(dat)
+			fmt.Println(dat["Id_"])
+			fmt.Println(id)
+			if dat["Id_"] == id {
+				return "验证通过"
+			}
+
+		}
+		if len(block.PrevBlockHash) == 0 {
+			break
+		}
+	}
+	return "验证失败：没有找到相关block"
 }
 
 //序列化数据结构

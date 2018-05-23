@@ -5,6 +5,7 @@ import (
 	"blockchain/models"
 	"github.com/astaxie/beego"
 	"fmt"
+	"blockchain/blocks"
 )
 type UserController struct {
 	beego.Controller
@@ -21,7 +22,6 @@ func (this *UserController) Index() {
 
 // @router / [post]
 func (this *UserController) Create() {
-	fmt.Println(111111)
 	mdb, mSession := utils.GetMgoDbSession()
 	defer mSession.Close()
 	name := this.GetString("name")
@@ -59,9 +59,20 @@ func (this *UserController) Destroy() {
 
 // @router /verify [get]
 func (this *UserController) VerifyByAccount() {
-	account := this.GetString("account") // 搜索的数值
+	account := this.GetString("account")
 	fmt.Println(account)
+	mdb, mSession := utils.GetMgoDbSession()
+	defer mSession.Close()
+	var flag string
+	user, err := models.GetUserByAccount(mdb, account)
+	if err != nil {
+		flag = "数据不存在"
+		this.Data["json"] = flag
+		this.ServeJSON()
+		return
+	}
+	flag = blocks.Verify(user.Id_.Hex())
 
-	this.Data["json"] = 1
+	this.Data["json"] = flag
 	this.ServeJSON()
 }

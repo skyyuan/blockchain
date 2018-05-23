@@ -5,7 +5,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"blockchain/blocks"
 	"fmt"
-	"bytes"
+	"encoding/json"
 )
 
 type User struct {
@@ -25,16 +25,14 @@ func Newuser(db *mgo.Database, name, account, pwd string)(user User, err error){
 	if err == nil {
 		bc := blocks.GetBlockchain()
 		defer bc.DBClose()
-		json :=  make(map[string]interface{})
-		json["id"] = user.Id_.Hex()
-		json["name"] = user.Name
-		json["account"] = user.Account
-		json["pwd"] = user.Pwd
-		b := new(bytes.Buffer)
-		for key, value := range json {
-			fmt.Fprintf(b, "%s=\"%s\"\n", key, value)
+		out, err := json.Marshal(user)
+		if err != nil {
+			panic (err)
 		}
-		bc.AddBlock(b.String(), user.Id_.Hex())
+
+		fmt.Println(string(out))
+
+		bc.AddBlock(string(out), user.Id_.Hex())
 	}
 	return
 }
@@ -47,6 +45,13 @@ func GetUser(db *mgo.Database, name string)(user User, err error){
 	return
 }
 
+
+func GetUserByAccount(db *mgo.Database, account string)(user User, err error){
+	collection := db.C("users")
+	err = collection.Find(bson.M{"account": account}).One(&user)
+	return
+	return
+}
 
 func GetUsers(db *mgo.Database)(users []User, err error){
 

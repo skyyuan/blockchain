@@ -3,6 +3,7 @@ package blocks
 import (
 	"github.com/boltdb/bolt"
 	"fmt"
+	"errors"
 )
 const dbFile = "blockchain.db"
 const blocksBucket = "blocks"
@@ -92,6 +93,31 @@ func GetBlockchain() *Blockchain {
 
 	return &bc
 }
+
+//获取区块
+func (bc *Blockchain) GetBlock(blockHash []byte) (Block, error) {
+	var block Block
+
+	err := bc.db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(blocksBucket))
+
+		blockData := b.Get(blockHash)
+
+		if blockData == nil {
+			return errors.New("Block is not found.")
+		}
+
+		block = *DeserializeBlock(blockData)
+
+		return nil
+	})
+	if err != nil {
+		return block, err
+	}
+
+	return block, nil
+}
+
 
 //迭代器初始化
 func (bc *Blockchain) Iterator() *BlockchainIterator {
