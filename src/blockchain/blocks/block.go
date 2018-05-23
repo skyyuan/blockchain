@@ -1,11 +1,11 @@
 package blocks
 
 import (
-	"strconv"
-	"crypto/sha256"
 	"bytes"
-	"time"
+	"crypto/sha256"
 	"encoding/gob"
+	"strconv"
+	"time"
 )
 
 type Block struct {
@@ -14,6 +14,7 @@ type Block struct {
 	PrevBlockHash []byte
 	Hash          []byte
 	Nonce         int
+	Id            []byte
 }
 
 func (b *Block) SetHash() {
@@ -23,10 +24,9 @@ func (b *Block) SetHash() {
 	b.Hash = hash[:]
 }
 
-
 //创建区块
-func NewBlock(data string, prevBlockHash []byte) *Block {
-	block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}, 0}
+func NewBlock(data, id string, prevBlockHash []byte) *Block {
+	block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}, 0, []byte(id)}
 	//block.SetHash()
 
 	pow := NewProofOfWork(block)
@@ -38,9 +38,8 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 	return block
 }
 
-
 func NewGenesisBlock() *Block {
-	return NewBlock("Genesis Block", []byte{})
+	return NewBlock("Genesis Block", "1", []byte{})
 }
 
 //序列化数据结构

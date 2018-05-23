@@ -6,5 +6,13 @@ import (
 )
 
 func init() {
-    beego.Router("/", &controllers.MainController{})
+	ns := beego.NewNamespace("api/blocks/",
+		beego.NSNamespace("/users",
+			beego.NSInclude(
+				&controllers.UserController{},
+			),
+		),
+	)
+
+	beego.AddNamespace(ns)
 }
